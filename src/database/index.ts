@@ -1,4 +1,5 @@
 import { connect } from 'mongoose'
+import VoteTracker from '../structures/bot/VoteTracker'
 import { GuildDB } from './guild'
 import { UserDB } from './user'
 
@@ -11,9 +12,11 @@ export type DBOptions = string | {
 }
 
 export class Database {
-  userDB = new UserDB()
-  guildDB = new GuildDB()
-  constructor(private readonly options: DBOptions) {
+  users: UserDB
+  guilds: GuildDB
+  constructor(private readonly options: DBOptions, client: VoteTracker) {
+    this.users = new UserDB(client)
+    this.guilds = new GuildDB(client)
     const connectionString = typeof options === 'string'
       ? options
       : 'mongodb://' +

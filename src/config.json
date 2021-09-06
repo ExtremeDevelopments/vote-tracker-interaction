@@ -1,0 +1,11 @@
+{
+  "bot": {
+    "token":""
+  },
+  "influx": {
+    "token":"",
+    "org": "",
+    "bucket":"",
+    "url": ""
+  }
+}

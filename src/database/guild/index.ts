@@ -1,5 +1,6 @@
 import { Cache } from '@jpbberry/cache'
 import { Schema, model } from 'mongoose'
+import VoteTracker from '../../structures/bot/VoteTracker'
 
 export interface GuildDoc {
   id: string
@@ -37,8 +38,9 @@ const guildModel = model<GuildDoc>('guilds.config', guildSchema)
 
 export class GuildDB {
   cache: Cache<string, GuildDoc> = new Cache(15 * 60 * 1000)
-
+  constructor(private readonly client: VoteTracker) { }
   async getGuild(id: string): Promise<GuildDoc> {
+    this.client.influx.addDBCount('guilds')
     const fromCache = this.cache.get(id)
 
     if (fromCache !== undefined) return fromCache
@@ -54,6 +56,7 @@ export class GuildDB {
   }
 
   public async updateGuild(doc: GuildDoc): Promise<void> {
+    this.client.influx.addDBCount('guilds')
     const id = doc.id
     this.cache.set(id, doc)
 

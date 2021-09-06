@@ -1,6 +1,7 @@
 import express, { Express } from 'express'
 import { LoadRoutes as loadRoutes } from '@jpbberry/load-routes'
 import path from 'path'
+import VoteTracker from '../structures/bot/VoteTracker'
 export interface APIOptions {
   port: number | string
 
@@ -8,11 +9,11 @@ export interface APIOptions {
 export class API {
   app: Express
   options: APIOptions
-  master: any
-  constructor(options: APIOptions, master: any) {
+  client: VoteTracker
+  constructor(options: APIOptions, client: VoteTracker) {
     this.app = express()
     this.options = options
-    this.master = master
+    this.client = client
   }
   start(): void {
     loadRoutes(this.app, path.resolve(__dirname, '../routes/'), this)

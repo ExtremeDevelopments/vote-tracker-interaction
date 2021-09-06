@@ -5,6 +5,7 @@
   "main": "./dist/index",
   "dependencies": {
     "@discordjs/builders": "^0.5.0",
+    "@influxdata/influxdb-client": "^1.17.0",
     "@jpbberry/cache": "^1.0.4",
     "@jpbberry/load-routes": "^1.0.3",
     "@top-gg/sdk": "^3.1.1",
@@ -12,6 +13,7 @@
     "discord.js": "^13.1.0",
     "events": "^3.3.0",
     "express": "^4.17.1",
+    "mee6-levels": "^1.0.1",
     "mongoose": "^5.13.7",
     "table": "^6.5.1",
     "topgg-autoposter": "^1.1.10",

@@ -1,5 +1,6 @@
 import { Schema, model } from "mongoose";
 import { Cache } from '@jpbberry/cache'
+import VoteTracker from "../../structures/bot/VoteTracker";
 
 export interface UserDoc {
   id: string
@@ -28,14 +29,15 @@ const userModel = model<UserDoc>('users', userSchema)
 export class UserDB {
   cache: Cache<string, UserDoc> = new Cache(15 * 60 * 1000)
 
-
+  constructor(private readonly client: VoteTracker) { }
   async getUser(id: string): Promise<UserDoc> {
+    this.client.influx.addDBCount('users')
     const fromCache = this.cache.get(id)
 
     if (fromCache !== undefined) return fromCache
 
     const fromDB: UserDoc = await userModel.findOne({ id }).lean()
-    
+
     if (fromDB) {
       this.cache.set(id, fromDB)
       return fromDB
@@ -44,6 +46,7 @@ export class UserDB {
     return await userModel.create({ id })
   }
   async updateUser(doc: UserDoc): Promise<void> {
+    this.client.influx.addDBCount('user-s')
     const id = doc.id
     this.cache.set(id, doc)
 
