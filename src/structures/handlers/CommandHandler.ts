@@ -64,20 +64,13 @@ export default class CommandHandler {
     prefix = await getPrefix()
     if (!Array.isArray(prefix)) prefix = [prefix]
 
-    prefix.push(`<@${this.client.user?.id}>`, `<@!${this.client.user?.id}>`)
+    prefix.push(`<@${this.client.user?.id}>`)
 
     const content = message.content.toLowerCase()
-
     prefix = prefix.find(x => content.startsWith(x))
+    if(!prefix) return
 
-
-    const args = message.content.slice(prefix ? prefix.length : 0).split(/\s/)
-
-    if (args[0] === '') {
-      args.shift()
-      prefix += ' '
-    }
-
+    const args = message.content.slice(prefix.length).split(/\s/)
     const command = args.shift() ?? ''
 
     const cmd = this.find(command)

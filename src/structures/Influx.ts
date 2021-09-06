@@ -33,7 +33,7 @@ export default class Influx {
     const writeAPI = this.influx.getWriteApi(config.influx.org, config.influx.bucket)
       .useDefaultTags({ host: name })
 
-    writeAPI.writePoint(new Point("event").intField("count", count))
+    writeAPI.writePoint(new Point("db").intField("count", count))
     writeAPI.close().then(() => { })
       .catch((err) => console.log(err))
   }
@@ -41,7 +41,7 @@ export default class Influx {
     const writeAPI = this.influx.getWriteApi(config.influx.org, config.influx.bucket)
       .useDefaultTags({ host: name })
 
-    writeAPI.writePoint(new Point("event").intField("count", count))
+    writeAPI.writePoint(new Point("command").intField("count", count))
     writeAPI.close().then(() => { })
       .catch((err) => console.log(err))
   }
@@ -88,7 +88,7 @@ export default class Influx {
   }
   commandRan(name: string) {
     const found = this.commandCounter.find(e => e.name === name)
-    if (!found) this.eventCounter.push({ name, count: 1 })
+    if (!found) this.commandCounter.push({ name, count: 1 })
     if (found) found.count++
   }
 }

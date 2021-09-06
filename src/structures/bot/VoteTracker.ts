@@ -18,10 +18,10 @@ export default class VoteTracker extends Client {
     this.db = new Database('mongodb://localhost:27017/votetracker', this)
     this.commandHandler = new CommandHandler(this)
     this.influx = new Influx(this, 'Vote Tracker')
-    this.voteAPI = new API({ port: 3000 }, this)
+    this.voteAPI = new API({ port: 3002 }, this)
   }
   start(): void {
-    this.commandHandler.load(resolve(__dirname, '../../commands'))
+    this.commandHandler.load(resolve(__dirname, '../../bot/commands'))
     this.on('ready', () => {
       console.log(green(`VT online!`))
       this.influx.sendBaseStats()
