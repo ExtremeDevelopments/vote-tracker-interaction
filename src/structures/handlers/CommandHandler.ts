@@ -55,10 +55,10 @@ export default class CommandHandler {
   private async exec(message: Message): Promise<void> {
     if (!message.content || message.author.bot) return
 
-    let prefix: string | string[] | undefined = '-'
+    let prefix: string | string[] | undefined = 'v!'
     let getPrefix = async () => {
       const id = message.guild?.id
-      if (!id) return '-'
+      if (!id) return 'v!'
       return await this.client.db.guilds.getPrefix(id)
     }
     prefix = await getPrefix()
