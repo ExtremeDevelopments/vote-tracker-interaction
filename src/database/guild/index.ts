@@ -6,14 +6,14 @@ export interface GuildDoc {
   id: string
   prefix: string
   premium: boolean
-  auth_code: string
+  auth_code: string | null
   vote: {
-    channel_id: string
+    channel_id: string | null
     message: string
-    role: string
+    role: string | null
   }
   moderation: {
-    log: string
+    log: string | null
     roles: Array<string>
   }
 }

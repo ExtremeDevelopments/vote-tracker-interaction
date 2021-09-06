@@ -15,6 +15,7 @@ export default class VoteHandler {
     if (!guild) return
 
     const guildData = await this.client.db.guilds.getGuild(guild.id)
+    if (!guildData.vote.channel_id) return
     if (data.authorization !== guildData.auth_code) return
 
     const channel = this.client.channels.cache.get(guildData.vote.channel_id) ||
@@ -28,7 +29,9 @@ export default class VoteHandler {
       guild_id: data.guild
     }
     this.client.db.users.updateUser(userData)
-
+    const userVoteData = await this.client.db.users.getUserVotes(data.user, data.guild)
+    userVoteData.total_votes + 1
+    userVoteData.last_vote = new Date()
     this.sendVoteMessage(channel, guildData, guild, userData)
   }
   async sendVoteMessage(channel: Channel, guildData: GuildDoc, guild: Guild, userData: UserDoc) {
