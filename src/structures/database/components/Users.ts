@@ -1,20 +1,20 @@
 import { Schema, model } from "mongoose";
+import { Snowflake } from "discord-api-types";
 import { Cache } from '@jpbberry/cache'
-import VoteTracker from "../../structures/bot/VoteTracker";
-
+import { VTWorker } from "../../client/VTWorker";
 export interface UserDoc {
-  id: string
+  id: Snowflake
   blacklisted: boolean
   owner: boolean
   total_votes: number
   last_vote: {
     date: Date | null
-    guild_id: string | null
+    guild_id: Snowflake | null
   }
 }
 export interface UserVoteDoc {
-  id: string
-  guild_id: string
+  id: Snowflake
+  guild_id: Snowflake
   total_votes: number
   last_vote: Date
 }
@@ -30,81 +30,74 @@ const userSchema = new Schema({
 })
 const userVoteSchema = new Schema({
   id: { type: String, required: true },
-  guild: { type: String, required: true },
+  guild_id: { type: String, required: true },
   total_votes: { type: Number, default: 0 },
   last_vote: { type: Date, default: null }
 })
 
 const userModel = model<UserDoc>('users.global', userSchema)
 const userVoteModel = model<UserVoteDoc>('users.votes', userVoteSchema)
+
 export class UserDB {
   cache = {
-    votes: new Cache<string, UserVoteDoc>(15 * 60 * 1000),
-    globals: new Cache<string, UserDoc>(15 * 60 * 1000)
+    votes: new Cache<Snowflake, UserVoteDoc>(15 * 60 * 1000),
+    globals: new Cache<Snowflake, UserDoc>(15 * 60 * 1000)
   }
-  constructor(private readonly client: VoteTracker) { }
-  async getUser(id: string): Promise<UserDoc> {
-    this.client.influx.addDBCount('users')
+  constructor(private readonly worker: VTWorker) { }
+
+  async getUser(id: Snowflake): Promise<UserDoc> {
     const fromCache = this.cache.globals.get(id)
 
     if (fromCache !== undefined) return fromCache
 
     const fromDB: UserDoc = await userModel.findOne({ id }).lean()
 
-    if (fromDB) {
-      this.cache.globals.set(id, fromDB)
-      return fromDB
-    }
+    if (fromDB) return this.cache.globals.set(id, fromDB)
 
     return await userModel.create({ id })
   }
-  async getUserVotes(id: string, guildId: string): Promise<UserVoteDoc> {
-    this.client.influx.addDBCount('users-votes')
-    const appended = `${guildId}-${id}`
-    const fromCache = this.cache.votes.get(id)
+
+  async getUserVotes(id: Snowflake, guild_id: Snowflake): Promise<UserVoteDoc> {
+    const appended = `${guild_id}-${id}`
+    const fromCache = this.cache.votes.get(appended)
 
     if (fromCache !== undefined) return fromCache
 
-    const fromDB: UserVoteDoc = await userVoteModel.findOne({ id, guild_id: guildId }).lean()
+    const fromDB: UserVoteDoc = await userVoteModel.findOne({ id }).lean()
 
-    if (fromDB) {
-      this.cache.votes.set(appended, fromDB)
-      return fromDB
-    }
+    if (fromDB) return this.cache.votes.set(id, fromDB)
 
-    return await userVoteModel.create({ id, guild_id: guildId })
+    return await userVoteModel.create({ id, guild_id })
   }
-  async updateUser(doc: UserDoc): Promise<void> {
-    this.client.influx.addDBCount('users')
-    const id = doc.id
-    this.cache.globals.set(id, doc)
 
+  async updateUser(doc: UserDoc): Promise<void> {
+    this.cache.globals.set(doc.id, doc)
     await userModel.updateOne({ id: doc.id }, doc, { upsert: true })
   }
-  async updateVoteUser(doc: UserVoteDoc): Promise<void> {
-    this.client.influx.addDBCount('users-votes')
+
+  async UpdateVoteUser(doc: UserVoteDoc): Promise<void> {
     this.cache.votes.set(`${doc.guild_id}-${doc.id}`, doc)
 
     await userVoteModel.updateOne({ id: doc.id, guild_id: doc.guild_id }, doc, { upsert: true })
   }
 
-  async getOwner(id: string): Promise<boolean> {
+  async getOwner(id: Snowflake): Promise<boolean> {
     const userData = await this.getUser(id)
     return userData.owner
   }
 
-  async setOwner(id: string, value: boolean): Promise<void> {
+  async setOwner(id: Snowflake, value: boolean): Promise<void> {
     const userData = await this.getUser(id)
     userData.owner = value
     await this.updateUser(userData)
   }
 
-  async getBlacklisted(id: string): Promise<boolean> {
+  async getBlacklisted(id: Snowflake): Promise<boolean> {
     const userData = await this.getUser(id)
     return userData.blacklisted
   }
 
-  async setBlacklisted(id: string, value: boolean): Promise<void> {
+  async setBlacklisted(id: Snowflake, value: boolean): Promise<void> {
     const userData = await this.getUser(id)
     userData.blacklisted = value
     await this.updateUser(userData)

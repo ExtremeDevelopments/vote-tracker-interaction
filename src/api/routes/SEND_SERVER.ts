@@ -1,3 +1,4 @@
+import { DiscordEventMap } from 'discord-rose'
 import { Router } from 'express'
 import { API } from '..'
 
@@ -9,7 +10,6 @@ export default function (this: API, router: Router): void {
       type: string
       authorization: string
     }
-    this.client.emit('VOTE', req.body as APIResponse)
     res.status(200).send('Success 1')
   })
 } 

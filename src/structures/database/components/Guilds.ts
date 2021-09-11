@@ -1,20 +1,20 @@
 import { Cache } from '@jpbberry/cache'
 import { Schema, model } from 'mongoose'
-import VoteTracker from '../../structures/bot/VoteTracker'
-
+import { Snowflake } from 'discord-api-types'
+import { VTWorker } from '../../client/VTWorker'
 export interface GuildDoc {
-  id: string
+  id: Snowflake
   prefix: string
   premium: boolean
   auth_code: string | null
   vote: {
-    channel_id: string | null
-    message: string
-    role: string | null
+    channel_id: Snowflake | null
+    message: Snowflake
+    role: Snowflake | null
   }
   moderation: {
-    log: string | null
-    roles: Array<string>
+    log: Snowflake | null
+    roles: Array<Snowflake>
   }
 }
 
@@ -37,28 +37,25 @@ const guildSchema = new Schema({
 const guildModel = model<GuildDoc>('guilds.config', guildSchema)
 
 export class GuildDB {
-  cache: Cache<string, GuildDoc> = new Cache(15 * 60 * 1000)
-  constructor(private readonly client: VoteTracker) { }
-  async getGuild(id: string): Promise<GuildDoc> {
-    this.client.influx.addDBCount('guilds')
+  cache: Cache<Snowflake, GuildDoc> = new Cache(15 * 60 * 1000)
+
+  constructor(private readonly worker: VTWorker) { }
+  
+  async getGuild(id: Snowflake): Promise<GuildDoc> {
+
     const fromCache = this.cache.get(id)
 
     if (fromCache !== undefined) return fromCache
 
     const fromDB: GuildDoc = await guildModel.findOne({ id }).lean()
 
-    if (fromDB !== null) {
-      this.cache.set(id, fromDB)
-      return fromDB
-    }
+    if (fromDB !== null) return this.cache.set(id, fromDB)
 
     return await guildModel.create({ id })
   }
 
   public async updateGuild(doc: GuildDoc): Promise<void> {
-    this.client.influx.addDBCount('guilds')
-    const id = doc.id
-    this.cache.set(id, doc)
+    this.cache.set(doc.id, doc)
 
     await guildModel.updateOne({ id: doc.id }, doc, { upsert: true })
   }
@@ -72,5 +69,10 @@ export class GuildDB {
     const guildData = await this.getGuild(id)
     guildData.prefix = prefix
     await this.updateGuild(guildData)
+  }
+  public async getAllCodes(): Promise<(string | null)[]> {
+    const tickets = await guildModel.find({ })
+    return tickets.filter(x => x.auth_code !== null)
+      .map(x => x.auth_code)
   }
 }

@@ -1,11 +1,11 @@
 {
   "bot": {
-    "token":""
+    "token":"Nzc1ODM5NzYyMzg3OTU5ODc4.X6sLFQ.QrVFQDx0ly6D29opHDtfBqfcGs0"
   },
   "influx": {
-    "token":"",
-    "org": "",
-    "bucket":"",
-    "url": ""
+    "token":"1IACivlg7kaukSPYyI_7vNuM-v3RomzZpLt5w1CAvKcWrFtUiRMuGFh6xvQ0ANUgGAySGdhReMvDcNKDvoJgBQ==",
+    "org": "votetracker",
+    "bucket":"votetracker",
+    "url": "https://influxdb.extreme-is.me"
   }
 }

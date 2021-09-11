@@ -1,7 +1,14 @@
-import VoteTracker from "./structures/bot/VoteTracker";
+import { VTWorker } from "./structures/client/VTWorker";
+import { CommandContext, SlashCommandContext } from "./structures/extensions/CommandContext";
 
-const VT = new VoteTracker({
-  intents: 1543,
-  partials: ['CHANNEL', 'GUILD_MEMBER', 'MESSAGE', 'REACTION', 'USER']
+const worker = new VTWorker({
+  token: 'Nzc1ODM5NzYyMzg3OTU5ODc4.X6sLFQ.QrVFQDx0ly6D29opHDtfBqfcGs0',
 })
-VT.start()
+worker.loadMiddlewares(__dirname + '/bot/middlewares')
+worker.commands.options({
+  bots: false,
+  interactionGuild: '707479016696971275'
+})
+.load(__dirname + '/bot/commands')
+.SlashCommandContext = SlashCommandContext
+worker.commands.CommandContext = CommandContext
