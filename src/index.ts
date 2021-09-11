@@ -3,6 +3,9 @@ import { CommandContext, SlashCommandContext } from "./structures/extensions/Com
 import { bot as config } from './config.json'
 const worker = new VTWorker({
   token: config.token,
+  cache: {
+    users: true
+  }
 })
 worker.loadMiddlewares(__dirname + '/bot/middlewares')
 worker.commands.options({
