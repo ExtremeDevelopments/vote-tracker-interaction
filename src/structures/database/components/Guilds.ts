@@ -40,7 +40,7 @@ export class GuildDB {
   cache: Cache<Snowflake, GuildDoc> = new Cache(15 * 60 * 1000)
 
   constructor(private readonly worker: VTWorker) { }
-  
+
   async getGuild(id: Snowflake): Promise<GuildDoc> {
 
     const fromCache = this.cache.get(id)
@@ -49,7 +49,10 @@ export class GuildDB {
 
     const fromDB: GuildDoc = await guildModel.findOne({ id }).lean()
 
-    if (fromDB !== null) return this.cache.set(id, fromDB)
+    if (fromDB !== null) {
+      this.cache.set(id, fromDB)
+      return fromDB
+    }
 
     return await guildModel.create({ id })
   }
@@ -71,7 +74,7 @@ export class GuildDB {
     await this.updateGuild(guildData)
   }
   public async getAllCodes(): Promise<(string | null)[]> {
-    const tickets = await guildModel.find({ })
+    const tickets = await guildModel.find({})
     return tickets.filter(x => x.auth_code !== null)
       .map(x => x.auth_code)
   }

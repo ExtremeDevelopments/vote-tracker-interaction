@@ -52,7 +52,10 @@ export class UserDB {
 
     const fromDB: UserDoc = await userModel.findOne({ id }).lean()
 
-    if (fromDB) return this.cache.globals.set(id, fromDB)
+    if (fromDB) {
+      this.cache.globals.set(id, fromDB)
+      return fromDB
+    }
 
     return await userModel.create({ id })
   }
@@ -65,7 +68,10 @@ export class UserDB {
 
     const fromDB: UserVoteDoc = await userVoteModel.findOne({ id }).lean()
 
-    if (fromDB) return this.cache.votes.set(id, fromDB)
+    if (fromDB) {
+      this.cache.votes.set(id, fromDB)
+      return fromDB
+    }
 
     return await userVoteModel.create({ id, guild_id })
   }
