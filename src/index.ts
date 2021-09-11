@@ -1,8 +1,8 @@
 import { VTWorker } from "./structures/client/VTWorker";
 import { CommandContext, SlashCommandContext } from "./structures/extensions/CommandContext";
-
+import { bot as config } from './config.json'
 const worker = new VTWorker({
-  token: 'Nzc1ODM5NzYyMzg3OTU5ODc4.X6sLFQ.QrVFQDx0ly6D29opHDtfBqfcGs0',
+  token: config.token,
 })
 worker.loadMiddlewares(__dirname + '/bot/middlewares')
 worker.commands.options({

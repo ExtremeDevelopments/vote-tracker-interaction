@@ -26,7 +26,10 @@ export class Database {
       `${options.port ? options.port : '27017'}` +
       `${options.options ? options.options : ''}`
 
-    connect(connectionString)
+    connect(connectionString, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    })
       .then(() => console.log('Connected to Database.'))
       .catch(() => console.log('Connection to database failed.'))
   }
