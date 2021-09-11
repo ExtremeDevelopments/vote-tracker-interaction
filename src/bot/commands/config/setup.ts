@@ -23,7 +23,7 @@ export default <CommandOptions>{
     if (ctx.isInteraction) ctx.args = [ctx.options]
     if (ctx.options) {
       const guildData = await ctx.worker.db.guilds.getGuild(ctx.guild.id)
-      if (guildData.auth_code !== null) return ctx.reply({ content: 'This server is already setup!' }, true)
+      if (guildData.auth_code !== null) return ctx.reply({ content: 'This server is already setup!' }, false, true)
 
       const authCode = createID(await ctx.worker.db.guilds.getAllCodes(), 8)
       guildData.auth_code = authCode
@@ -47,7 +47,7 @@ export default <CommandOptions>{
       If you have any questions or concerns, please join our [Support Server!](https://discord.gg/XdZexqk4HD)`)
         .footer(`Vote Tracker`)
         .color(colors.ORANGE)
-      ctx.reply({ embeds: [embed.render()] }, true)
+      ctx.reply({ embeds: [embed.render()] }, false, true)
     }
   }
 }
