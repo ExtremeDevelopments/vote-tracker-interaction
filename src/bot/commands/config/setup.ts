@@ -27,6 +27,7 @@ export default <CommandOptions>{
 
       const authCode = createID(await ctx.worker.db.guilds.getAllCodes(), 8)
       guildData.auth_code = authCode
+      guildData.vote.channel_id = ctx.options.channel
       ctx.worker.db.guilds.updateGuild(guildData)
 
       const embed = ctx.embed

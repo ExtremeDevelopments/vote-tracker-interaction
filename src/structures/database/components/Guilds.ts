@@ -12,10 +12,6 @@ export interface GuildDoc {
     message: Snowflake
     role: Snowflake | null
   }
-  moderation: {
-    log: Snowflake | null
-    roles: Array<Snowflake>
-  }
 }
 
 const guildSchema = new Schema({
@@ -27,10 +23,6 @@ const guildSchema = new Schema({
     channel_id: { type: String, default: null },
     message: { type: String, default: '{member} voted for us at {link}!' },
     role: { type: String, default: null },
-  },
-  moderation: {
-    log: { type: String, default: null },
-    roles: { type: Array, default: [] }
   }
 })
 
@@ -38,8 +30,6 @@ const guildModel = model<GuildDoc>('guilds.config', guildSchema)
 
 export class GuildDB {
   cache: Cache<Snowflake, GuildDoc> = new Cache(15 * 60 * 1000)
-
-  constructor(private readonly worker: VTWorker) { }
 
   async getGuild(id: Snowflake): Promise<GuildDoc> {
 

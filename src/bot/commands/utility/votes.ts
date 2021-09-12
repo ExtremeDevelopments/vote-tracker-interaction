@@ -31,7 +31,7 @@ export default <CommandOptions>{
     const embed = ctx.embed
       .title(`${foundUser ? foundUser.username : `User`}'s vote information.`)
       .description(`**Total votes:** ${userData.total_votes}
-      **Last vote:** ${userData.last_vote === null ? `Never` : userData.last_vote.toLocaleTimeString()}
+      **Last vote:** ${userData.last_vote === null ? `Never` : `<t:${Math.floor(userData.last_vote / 1000)}:R>`}
       `)
       .color(colors.ORANGE)
     ctx.reply({ embeds: [embed.render()] }, false, ctx.options.ephermal || false)

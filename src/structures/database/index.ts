@@ -14,9 +14,9 @@ export type DBOptions = string | {
 export class Database {
   users: UserDB
   guilds: GuildDB
-  constructor(private readonly options: DBOptions, worker: VTWorker) {
-    this.users = new UserDB(worker)
-    this.guilds = new GuildDB(worker)
+  constructor(private readonly options: DBOptions) {
+    this.users = new UserDB()
+    this.guilds = new GuildDB()
     const connectionString = typeof options === 'string'
       ? options
       : 'mongodb://' +

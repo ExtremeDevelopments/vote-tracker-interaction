@@ -7,26 +7,18 @@ export interface UserDoc {
   blacklisted: boolean
   owner: boolean
   total_votes: number
-  last_vote: {
-    date: Date | null
-    guild_id: Snowflake | null
-  }
 }
 export interface UserVoteDoc {
   id: Snowflake
   guild_id: Snowflake
   total_votes: number
-  last_vote: Date
+  last_vote: number
 }
 const userSchema = new Schema({
   id: { type: String, required: true, unique: true },
   blacklisted: { type: Boolean, default: false },
   owner: { type: Boolean, default: false },
-  total_votes: { type: Number, default: 0 },
-  last_vote: {
-    date: { type: Date, default: null },
-    guild_id: { type: String, default: null }
-  }
+  total_votes: { type: Number, default: 0 }
 })
 const userVoteSchema = new Schema({
   id: { type: String, required: true },
@@ -43,7 +35,6 @@ export class UserDB {
     votes: new Cache<Snowflake, UserVoteDoc>(15 * 60 * 1000),
     globals: new Cache<Snowflake, UserDoc>(15 * 60 * 1000)
   }
-  constructor(private readonly worker: VTWorker) { }
 
   async getUser(id: Snowflake): Promise<UserDoc> {
     const fromCache = this.cache.globals.get(id)
@@ -81,9 +72,9 @@ export class UserDB {
     await userModel.updateOne({ id: doc.id }, doc, { upsert: true })
   }
 
-  async UpdateVoteUser(doc: UserVoteDoc): Promise<void> {
+  async updateVoteUser(doc: UserVoteDoc): Promise<void> {
     this.cache.votes.set(`${doc.guild_id}-${doc.id}`, doc)
-
+    console.log(doc)
     await userVoteModel.updateOne({ id: doc.id, guild_id: doc.guild_id }, doc, { upsert: true })
   }
 
