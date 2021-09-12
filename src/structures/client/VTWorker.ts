@@ -15,11 +15,15 @@ export class VTWorker extends SingleWorker {
     const files = readdirSync(dir, { withFileTypes: true })
     for (const file of files) {
       const filePath = dir + '/' + file.name
-      if (file.isDirectory()) return this.loadMiddlewares(filePath)
-      if (!file.name.endsWith('.js')) return
+      if (file.isDirectory()) {
+        this.loadMiddlewares(filePath)
+        continue
+      }
+      if (!file.name.endsWith('.js')) continue
 
       const required = require(filePath)
       const middleware = required.default ? required.default : required
+
       this.commands.middleware(middleware())
 
       delete require.cache[require.resolve(filePath)]

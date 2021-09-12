@@ -86,6 +86,7 @@ export class UserDB {
   async setOwner(id: Snowflake, value: boolean): Promise<void> {
     const userData = await this.getUser(id)
     userData.owner = value
+    this.cache.globals.set(userData.id, userData)
     await this.updateUser(userData)
   }
 
@@ -97,6 +98,7 @@ export class UserDB {
   async setBlacklisted(id: Snowflake, value: boolean): Promise<void> {
     const userData = await this.getUser(id)
     userData.blacklisted = value
+    this.cache.globals.set(userData.id, userData)
     await this.updateUser(userData)
   }
 }
