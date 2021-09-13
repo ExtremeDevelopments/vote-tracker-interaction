@@ -10,7 +10,8 @@ export function createID(notAllowed: Array<string | null>, l: number): string {
   return result
 }
 export function replace(string: string, user: string, data: GuildDoc) {
-  return string.replace('{page}', `https://top.gg/servers/${data.id}`)
+  return string
+  .replace('{page}', `https://top.gg/servers/${data.id}`)
   .replace('{member}', `<@${user}>`)
   .replace('{user}', `<@${user}>`)
   .replace('{vote}', `https://top.gg/servers/${data.id}/vote`)

@@ -5,6 +5,8 @@ import { createID } from "../../../utils";
 
 export default <CommandOptions>{
   command: 'setup',
+  interactionOnly: true,
+  guildOnly: true,
   interaction: {
     name: 'setup',
     description: 'setup your server!',
@@ -15,7 +17,6 @@ export default <CommandOptions>{
         type: ApplicationCommandOptionType.Channel,
         required: true
       }
-
     ]
   },
   exec: async (ctx) => {
