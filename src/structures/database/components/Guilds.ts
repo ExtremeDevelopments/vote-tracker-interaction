@@ -31,7 +31,7 @@ const guildModel = model<GuildDoc>('guilds.config', guildSchema)
 export class GuildDB {
   cache: Cache<Snowflake, GuildDoc> = new Cache(15 * 60 * 1000)
 
-  async getGuild(id: Snowflake): Promise<GuildDoc> {
+  public async getGuild(id: Snowflake): Promise<GuildDoc> {
 
     const fromCache = this.cache.get(id)
 
