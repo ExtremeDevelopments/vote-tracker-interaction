@@ -6,8 +6,6 @@ function clean (text: string): string {
 }
 export default <CommandOptions>{
   command: 'eval',
-  description: 'Evaluate command.',
-  category: 'Owner',
   ownerOnly: true,
   exec: async (ctx) => {
     const worker = ctx.worker

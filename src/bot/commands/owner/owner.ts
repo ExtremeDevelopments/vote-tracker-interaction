@@ -2,8 +2,6 @@ import { CommandOptions, Snowflake } from "discord-rose";
 
 export default <CommandOptions>{
   command: 'owner',
-  description: 'Add or remove a owner.',
-  category: 'Owner',
   ownerOnly: true,
   exec: async (ctx) => {
     const userID = ctx.message.mentions[0]?.id ?? (ctx.args[0] || '').replace(/[<@!>]/g, '') as Snowflake
