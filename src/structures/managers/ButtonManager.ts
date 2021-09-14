@@ -1,5 +1,5 @@
 import { Cache } from "@jpbberry/cache";
-import { APIMessageComponentInteraction, ComponentType, GatewayInteractionCreateDispatch, GatewayInteractionCreateDispatchData, InteractionResponseType, InteractionType, RESTPostAPIChannelMessageJSONBody, RESTPostAPIWebhookWithTokenJSONBody, Snowflake } from "discord-api-types";
+import { APIMessageComponentInteraction, ComponentType, GatewayInteractionCreateDispatchData, InteractionType } from "discord-api-types";
 import { VTWorker } from "../client/VTWorker";
 /**
  * WIP
