@@ -4,6 +4,9 @@ import { MessageTypes } from "discord-rose";
 import { createID } from "../../utils";
 
 export class SlashCommandContext extends SlashContext {
+  get db() {
+    return this.worker.db
+  }
   async send(data: MessageTypes, ephermal: boolean = false): Promise<null> {
     return await super.send(data, ephermal)
   }
@@ -39,6 +42,9 @@ export class SlashCommandContext extends SlashContext {
   }
 }
 export class CommandContext extends CmdContext {
+  get db() {
+    return this.worker.db
+  }
   async reply(data: MessageTypes, mention?: boolean | undefined, ephermal?: boolean | undefined) {
     console.log(`ran`)
     const finalID = createID(this.worker.buttons.cache.map((x, e) => e), 16)
