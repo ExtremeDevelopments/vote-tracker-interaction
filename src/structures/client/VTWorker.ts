@@ -1,17 +1,13 @@
 import { SingleWorker } from "discord-rose";
 import { readdirSync } from "fs";
 import { Database } from "../database";
-import { WorkerAPI } from "../API/WorkerAPI";
-import InfluxHandler from "../managers/InfluxManager";
-import { ButtonManager } from "../managers/ButtonManager";
+import { WorkerAPI } from "./RESTWorker";
+import InfluxManager from "../managers/client/Influx";
+import { ButtonManager } from "../managers/client/Buttons";
 export class VTWorker extends SingleWorker {
-  handlers = {
-    interactions: null,
-    votes: null
-  }
   db = new Database('mongodb://localhost:27017/votetracker')
   rest = new WorkerAPI(this)
-  influx = new InfluxHandler(this)
+  influx = new InfluxManager(this)
   buttons = new ButtonManager(this)
   public loadMiddlewares(dir: string): any {
     const files = readdirSync(dir, { withFileTypes: true })

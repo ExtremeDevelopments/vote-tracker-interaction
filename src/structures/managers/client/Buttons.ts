@@ -1,6 +1,6 @@
 import { Cache } from "@jpbberry/cache";
 import { APIMessageComponentInteraction, ComponentType, GatewayInteractionCreateDispatchData, InteractionType } from "discord-api-types";
-import { VTWorker } from "../client/VTWorker";
+import { VTWorker } from "../../client/VTWorker";
 /**
  * WIP
  * 1. Add response when incorrect user clicks trash can

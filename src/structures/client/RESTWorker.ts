@@ -1,13 +1,13 @@
-import { VTWorker } from "../client/VTWorker";
-import TimeHandler from "./handlers/TimeHandler";
-import VoteHandler from "./handlers/VoteHandler";
+import { VTWorker } from "./VTWorker";
+import TimeManager from "../managers/api/internal/Times";
+import VoteManager from "../managers/api/internal/Votes";
 import express, { Express } from 'express'
 import { Database } from "../database";
 export class WorkerAPI {
   db: Database
   worker: VTWorker
-  voteHandler: VoteHandler
-  timeHandler: TimeHandler
+  voteManager: VoteManager
+  timeManager: TimeManager
   app: Express
   constructor(worker: VTWorker) {
     this.worker = worker
@@ -17,8 +17,8 @@ export class WorkerAPI {
     this.app.use(express.urlencoded({
       extended: true
     }))
-    this.voteHandler = new VoteHandler(this)
-    this.timeHandler = new TimeHandler(this)
+    this.voteManager = new VoteManager(this)
+    this.timeManager = new TimeManager(this)
     this.app.listen(2013)
   }
 }

@@ -1,8 +1,8 @@
-import { VTWorker } from "../../client/VTWorker";
-import { WorkerAPI } from "../workerAPI";
-import { Database } from "../../database";
+import { VTWorker } from "../../../client/VTWorker";
+import { WorkerAPI } from "../../../client/RESTWorker";
+import { Database } from "../../../database";
 import fetch from 'node-fetch'
-export default class TimeHandler {
+export default class TimeManager {
   worker: VTWorker
   db: Database
   notsent: Array<any>

@@ -1,6 +1,6 @@
-import { APIHandler } from "../structures/APIHandler";
+import { APIManager } from "../../structures/managers/api/external/Main";
 import { Express } from 'express'
-export default function (this: APIHandler, app: Express): void {
+export default function (this: APIManager, app: Express): void {
   app.post('/add-timer', (req, res) => {
     console.log(req.body)
     this.timers.set(`${req.body.guild}-${req.body.user}`, setTimeout(() => {

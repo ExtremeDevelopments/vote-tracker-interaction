@@ -1,8 +1,8 @@
-import { VTWorker } from "../client/VTWorker"
-import { influx as config } from '../../config.json'
+import { VTWorker } from "../../client/VTWorker"
+import { influx as config } from '../../../config.json'
 import { InfluxDB, Point } from "@influxdata/influxdb-client"
 
-export default class InfluxHandler {
+export default class InfluxManager {
   client = new InfluxDB({
     url: config.url,
     token: config.token
@@ -30,6 +30,7 @@ export default class InfluxHandler {
       writeAPI.writePoints([
         this.getMemoryStats(),
         new Point('servers').intField('count', this.worker.guilds.size),
+        // @ts-expect-error
         new Point('ping').intField('count', this.worker.shards.first()?.ping)
       ])
       writeAPI.close()

@@ -1,10 +1,10 @@
 import { LoadRoutes } from "@jpbberry/load-routes"
 import express, { Express } from "express"
 import { resolve } from "path"
-import { APIHandler } from "./APIHandler"
-export class RouterHandler {
+import { APIManager } from "./Main"
+export class RouterManager {
   app: Express
-  constructor(private readonly API: APIHandler) {
+  constructor(private readonly API: APIManager) {
     this.app = express()
 
     this.app.use(express.json())

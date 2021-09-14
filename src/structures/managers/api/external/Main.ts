@@ -1,11 +1,11 @@
 import { Cache } from "@jpbberry/cache"
 import fetch from 'node-fetch'
-import { Database } from "../../structures/database"
-import { RouterHandler } from "./RouterHandler"
+import { Database } from "../../../database"
+import { RouterManager } from "./Routes"
 
-export class APIHandler {
+export class APIManager {
   db = new Database('mongodb://localhost:27017/votetracker')
-  router = new RouterHandler(this)
+  router = new RouterManager(this)
   timers = new Cache<string, NodeJS.Timeout>(15 * 60 * 1000)
   notsent: Array<any> = []
   constructor() {

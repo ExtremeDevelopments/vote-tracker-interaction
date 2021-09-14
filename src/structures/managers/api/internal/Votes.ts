@@ -1,12 +1,12 @@
-import express, { Express } from "express";
+import { Express } from "express";
 import { Snowflake } from "discord-api-types";
-import { Database } from "../../database";
+import { Database } from "../../../database";
 import { Embed } from "discord-rose";
-import { replace } from "../../../utils";
-import { WorkerAPI } from "../workerAPI";
-import { VTWorker } from "../../client/VTWorker";
-import { colors } from "../../extensions/Colors";
-export default class VoteHandler {
+import { replace } from "../../../../utils";
+import { WorkerAPI } from "../../../client/RESTWorker";
+import { VTWorker } from "../../../client/VTWorker";
+import { colors } from "../../../extensions/Colors";
+export default class VoteManager {
   app: Express
   api: WorkerAPI
   db: Database //Shorthand
@@ -54,7 +54,7 @@ export default class VoteHandler {
     if (!role) return
 
     this.worker.api.members.addRole(guild.id, user.id, role.id).catch(e => null)
-    this.worker.rest.timeHandler.send('/add-timer', {
+    this.worker.rest.timeManager.send('/add-timer', {
       guild: guild.id,
       user: user.id
     })
