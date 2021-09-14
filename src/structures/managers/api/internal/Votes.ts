@@ -8,12 +8,10 @@ import { VTWorker } from "../../../client/VTWorker";
 import { colors } from "../../../extensions/Colors";
 export default class VoteManager {
   app: Express
-  api: WorkerAPI
   db: Database //Shorthand
   worker: VTWorker
   constructor(rest: WorkerAPI) {
     this.app = rest.app
-    this.api = rest;
     this.db = rest.db
     this.worker = rest.worker
     this.app.post('/new-vote', (req, res) => {
