@@ -11,18 +11,17 @@ export default class VoteHandler {
   api: WorkerAPI
   db: Database //Shorthand
   worker: VTWorker
-  constructor(api: WorkerAPI) {
-    this.app = api.app
-    this.api = api;
-    this.db = api.db
-    this.worker = api.worker
+  constructor(rest: WorkerAPI) {
+    this.app = rest.app
+    this.api = rest;
+    this.db = rest.db
+    this.worker = rest.worker
     this.app.post('/new-vote', (req, res) => {
       this.handleVote(req.body as APIResponse)
       res.sendStatus(200)
     })
   }
   async handleVote(data: APIResponse): Promise<void> {
-    console.log(data)
     const guild = await this.db.guilds.getGuild(data.guild)
     const user = await this.db.users.getUserVotes(data.user, data.guild)
 

@@ -1,4 +1,4 @@
-import { VTWorker } from "../../structures/client/VTWorker"
+import { VTWorker } from "../client/VTWorker"
 import { influx as config } from '../../config.json'
 import { InfluxDB, Point } from "@influxdata/influxdb-client"
 

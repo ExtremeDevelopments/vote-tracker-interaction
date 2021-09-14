@@ -1,6 +1,9 @@
 import { CommandContext } from "discord-rose";
 export default () => {
   return async (ctx: CommandContext) => {
-    return await ctx.worker.db.users.getBlacklisted(ctx.author.id)
+    const found = await ctx.worker.db.users.getBlacklisted(ctx.author.id)
+    
+    if(found) return false
+    if(!found) return true
   }
 }

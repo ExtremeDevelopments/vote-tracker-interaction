@@ -12,10 +12,10 @@ worker.commands.options({
   bots: false,
   interactionGuild: '707479016696971275'
 })
-.prefix((message) => {
+worker.commands.prefix((message) => {
   if(!message.guild_id) return 'v!'
   return worker.db.guilds.getPrefix(message.guild_id)
 })
-.load(__dirname + '/bot/commands')
-.SlashCommandContext = SlashCommandContext
+worker.commands.load(__dirname + '/bot/commands')
 worker.commands.CommandContext = CommandContext
+worker.commands.SlashCommandContext = SlashCommandContext

@@ -6,6 +6,7 @@ declare module 'discord-rose/dist/typings/lib' {
     interactionOnly?: boolean
     guildOnly?: boolean
     ownerOnly?: boolean
+    deletable?: boolean
   }
   type worker = VTWorker
 }

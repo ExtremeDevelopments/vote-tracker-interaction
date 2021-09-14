@@ -4,6 +4,7 @@ import { colors } from "../../../structures/extensions/Colors";
 
 export default <CommandOptions>{
   command: 'votes',
+  deletable: true,
   interaction: {
     name: 'votes',
     description: 'Add, remove, or check votes of a user!',
