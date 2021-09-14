@@ -32,7 +32,7 @@ export class SlashCommandContext extends SlashContext {
       }
     }
     console.log(data)
-    const msg = await super.send(data, ephermal)
+    await super.send(data, ephermal)
 
     if (!ephermal) this.worker.buttons.createButton(finalID, { author_id: this.author.id })
     return null
@@ -62,8 +62,8 @@ export class CommandContext extends CmdContext {
       }
     }
 
-    const msg = await super.reply(data, mention, ephermal)
+    
     this.worker.buttons.createButton(finalID, { author_id: this.author.id })
-    return msg
+    return await super.reply(data, mention, ephermal)
   }
 }
