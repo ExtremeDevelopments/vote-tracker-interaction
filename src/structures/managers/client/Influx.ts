@@ -30,7 +30,6 @@ export default class InfluxManager {
       writeAPI.writePoints([
         this.getMemoryStats(),
         new Point('servers').intField('count', this.worker.guilds.size),
-        // @ts-expect-error
         new Point('ping').intField('count', this.worker.shards.first()?.ping)
       ])
       writeAPI.close()
