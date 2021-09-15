@@ -1,5 +1,5 @@
-import { APIManager } from "../structures/managers/api/external/Main";
+import { RESTManager } from "../structures/managers/api/external/REST";
 
-const api = new APIManager()
-
-console.log(`External API connected`)
+const rest = new RESTManager(2312)
+rest.start()
+console.log(`REST API connected & binded to port ${rest.port}`)

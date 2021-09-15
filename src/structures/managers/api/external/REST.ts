@@ -1,23 +1,29 @@
 import { Cache } from "@jpbberry/cache"
 import fetch from 'node-fetch'
 import { Database } from "../../../database"
-import { RouterManager } from "./Routes"
-
-export class APIManager {
+import express, { Express } from 'express'
+import { LoadRoutes } from "@jpbberry/load-routes"
+import { resolve } from "path"
+export class RESTManager {
   db = new Database('mongodb://localhost:27017/votetracker')
-  router = new RouterManager(this)
   timers = new Cache<string, NodeJS.Timeout>(15 * 60 * 1000)
   notsent: Array<any> = []
-  constructor() {
-    this.router.app.listen(2312)
+  api: Express
+  constructor(public readonly port: number) {
+    this.api = express()
+    this.api.use(express.json())
+    this.api.use(express.urlencoded({ extended: true }))
+    LoadRoutes(this.api, resolve(__dirname + '../routes'), this)
 
   }
-
+  start(): void {
+    this.api.listen(this.port)
+  }
   async send(route: string, data: any) {
     const fetched = await fetch(`http://localhost:2013${route}`, {
       method: 'POST',
       body: JSON.stringify(data),
-      headers: { 'Content-Type': 'application/json'}
+      headers: { 'Content-Type': 'application/json' }
     })
     if (!fetched.ok) {
       console.log(`API | Did not receive response from worker internal API.`)
@@ -31,7 +37,7 @@ export class APIManager {
           fetch(`http://localhost:2013`, {
             method: 'POST',
             body: JSON.stringify(data),
-            headers: { 'Content-Type': 'application/json'}
+            headers: { 'Content-Type': 'application/json' }
           })
         }, 5000)
       }

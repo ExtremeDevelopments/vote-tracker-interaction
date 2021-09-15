@@ -1,6 +1,6 @@
-import { APIManager } from "../../structures/managers/api/external/Main";
+import { RESTManager } from "../../structures/managers/api/external/REST";
 import { Express } from 'express'
-export default function (this: APIManager, app: Express): void {
+export default function (this: RESTManager, app: Express): void {
   app.post('/add-timer', (req, res) => {
     console.log(req.body)
     this.timers.set(`${req.body.guild}-${req.body.user}`, setTimeout(() => {
