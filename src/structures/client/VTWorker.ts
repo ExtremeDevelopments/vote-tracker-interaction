@@ -7,8 +7,10 @@ import { ButtonManager } from "../managers/client/Buttons";
 export class VTWorker extends SingleWorker {
   db = new Database('mongodb://localhost:27017/votetracker')
   rest = new WorkerAPI(this)
-  influx = new InfluxManager(this)
-  buttons = new ButtonManager(this)
+  managers = {
+    influx: new InfluxManager(this),
+    buttons: new ButtonManager(this)
+  }
   public loadMiddlewares(dir: string): any {
     const files = readdirSync(dir, { withFileTypes: true })
     for (const file of files) {

@@ -12,7 +12,7 @@ export class SlashCommandContext extends SlashContext {
   }
   async reply(data: MessageTypes, mention?: boolean | undefined, ephermal?: boolean | undefined): Promise<null> {
     console.log("used")
-    const finalID = createID(this.worker.buttons.cache.map((x, e) => e), 16)
+    const finalID = createID(this.worker.managers.buttons.cache.map((x, e) => e), 16)
     if (this.command.deletable && typeof data === 'object') {
       if (!(data instanceof Embed)) {
         data.components = data.components = [
@@ -37,7 +37,7 @@ export class SlashCommandContext extends SlashContext {
     console.log(data)
     await super.send(data, ephermal)
 
-    if (!ephermal) this.worker.buttons.createButton(finalID, { author_id: this.author.id })
+    if (!ephermal) this.worker.managers.buttons.createButton(finalID, { author_id: this.author.id })
     return null
   }
 }
@@ -47,7 +47,7 @@ export class CommandContext extends CmdContext {
   }
   async reply(data: MessageTypes, mention?: boolean | undefined, ephermal?: boolean | undefined) {
     console.log(`ran`)
-    const finalID = createID(this.worker.buttons.cache.map((x, e) => e), 16)
+    const finalID = createID(this.worker.managers.buttons.cache.map((x, e) => e), 16)
     if (this.command.deletable && typeof data === 'object') {
       if (!(data instanceof Embed)) {
 
@@ -69,7 +69,7 @@ export class CommandContext extends CmdContext {
     }
 
     
-    this.worker.buttons.createButton(finalID, { author_id: this.author.id })
+    this.worker.managers.buttons.createButton(finalID, { author_id: this.author.id })
     return await super.reply(data, mention, ephermal)
   }
 }
