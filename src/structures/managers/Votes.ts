@@ -1,11 +1,11 @@
 import { Express } from "express";
 import { Snowflake } from "discord-api-types";
-import { Database } from "../../../database";
+import { Database } from "../database";
 import { Embed } from "discord-rose";
-import { replace } from "../../../../utils";
-import { WorkerAPI } from "../../../client/RESTWorker";
-import { VTWorker } from "../../../client/VTWorker";
-import { colors } from "../../../extensions/Colors";
+import { replace } from "../../utils";
+import { WorkerAPI } from "../client/RESTWorker";
+import { VTWorker } from "../client/VTWorker";
+import { colors } from "../extensions/Colors";
 export default class VoteManager {
   app: Express
   db: Database //Shorthand

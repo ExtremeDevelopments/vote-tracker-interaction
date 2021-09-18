@@ -1,6 +1,6 @@
 import { Cache } from "@jpbberry/cache"
 import fetch from 'node-fetch'
-import { Database } from "../../../database"
+import { Database } from "../database"
 import express, { Express } from 'express'
 import { LoadRoutes } from "@jpbberry/load-routes"
 import { resolve } from "path"

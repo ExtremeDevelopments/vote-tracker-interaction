@@ -1,7 +1,7 @@
 import { Cache } from "@jpbberry/cache";
 import { APIMessageComponentInteraction, ComponentType, GatewayInteractionCreateDispatchData, InteractionType } from "discord-api-types";
 import fetch from "node-fetch";
-import { VTWorker } from "../../client/VTWorker";
+import { VTWorker } from "../client/VTWorker";
 export class ButtonManager {
   worker: VTWorker;
   cache = new Cache<string, ButtonDoc>(15 * 60 * 1000)

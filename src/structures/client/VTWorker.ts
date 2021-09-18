@@ -2,8 +2,8 @@ import { SingleWorker } from "discord-rose";
 import { readdirSync } from "fs";
 import { Database } from "../database";
 import { WorkerAPI } from "./RESTWorker";
-import InfluxManager from "../managers/client/Influx";
-import { ButtonManager } from "../managers/client/Buttons";
+import InfluxManager from "../managers/Influx";
+import { ButtonManager } from "../managers/Buttons";
 export class VTWorker extends SingleWorker {
   db = new Database('mongodb://localhost:27017/votetracker')
   rest = new WorkerAPI(this)
