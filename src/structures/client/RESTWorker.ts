@@ -1,5 +1,5 @@
 import { VTWorker } from "./VTWorker";
-import TimeManager from "../managers/api/internal/Times";
+import TimeManager from "../managers/Times";
 import VoteManager from "../managers/api/internal/Votes";
 import express, { Express } from 'express'
 import { Database } from "../database";
