@@ -10,10 +10,17 @@ export default class InfluxManager {
   eventCounter: Array<Counter> = []
   dbCounter: Array<Counter> = []
   commandCounter: Array<Counter> = []
-  constructor(private readonly worker: VTWorker) {
-    this.worker.on('*', data => {
-      this.handleEvent(data)
-    })
+  constructor(private readonly worker: VTWorker | null) {
+    if (this.worker) {
+      this.worker.on('READY', () => {
+        setInterval(() => {
+          this.sendBaseStats()
+        }, 30e3)
+      })
+      this.worker.on('*', data => {
+        this.handleEvent(data)
+      })
+    }
   }
   sendStats(name: string, count: number, type: string): void {
     const writeAPI = this.client.getWriteApi(config.org, config.bucket)
@@ -24,18 +31,20 @@ export default class InfluxManager {
     } catch (e) { }
   }
   sendBaseStats(): void {
+    if (!this.worker) return
     const writeAPI = this.client.getWriteApi(config.org, config.bucket)
       .useDefaultTags({ host: `worker` })
     try {
       writeAPI.writePoints([
-        this.getMemoryStats(),
+        this.getMemoryStats() as Point,
         new Point('servers').intField('count', this.worker.guilds.size),
         new Point('ping').intField('count', this.worker.shards.first()?.ping)
       ])
       writeAPI.close()
     } catch (e) { }
   }
-  getMemoryStats(): Point {
+  getMemoryStats(): Point | null {
+    if (!this.worker) return null
     return new Point('memory')
       .intField('rss', this.worker.mem.rss)
       .intField('heap-used', this.worker.mem.heapUsed)
