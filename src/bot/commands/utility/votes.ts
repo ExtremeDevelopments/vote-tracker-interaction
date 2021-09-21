@@ -16,8 +16,8 @@ export default <CommandOptions>{
         required: true
       },
       {
-        name: 'ephermal',
-        description: 'Whether or not to make the message ephermal.',
+        name: 'ephemeral',
+        description: 'Whether or not to make the message ephemeral.',
         type: ApplicationCommandOptionType.Boolean
       }
     ]
@@ -25,16 +25,19 @@ export default <CommandOptions>{
   exec: async (ctx) => {
     if (!ctx.guild) return
     if (ctx.isInteraction) ctx.args = [ctx.options]
+
     const user = ctx.options.user || ctx.author.id
     const userData = await ctx.worker.db.users.getUserVotes(user, ctx.guild.id)
     const foundUser = ctx.worker.users.get(user)
-      ?? await ctx.worker.api.users.get(user).catch(e => null)
+      ?? await ctx.worker.api.users.get(user).catch(() => null)
+
     const embed = ctx.embed
       .title(`${foundUser ? foundUser.username : `User`}'s vote information.`)
       .description(`**Total votes:** ${userData.total_votes}
       **Last vote:** ${userData.last_vote === null ? `Never` : `<t:${Math.floor(userData.last_vote / 1000)}:R>`}
       `)
       .color(colors.ORANGE)
-    ctx.reply({ embeds: [embed.render()] }, false, ctx.options.ephermal || false)
+
+    await ctx.reply({ embeds: [embed.render()] }, false, ctx.options.ephermal || false)
   }
 }

@@ -1,5 +1,4 @@
 import { connect } from "mongoose";
-import { VTWorker } from "../client/VTWorker";
 import { GuildDB } from "./components/Guilds";
 import { UserDB } from "./components/Users";
 

@@ -7,9 +7,11 @@ export default class InfluxManager {
     url: config.url,
     token: config.token
   })
+
   eventCounter: Array<Counter> = []
   dbCounter: Array<Counter> = []
   commandCounter: Array<Counter> = []
+
   constructor(private readonly worker: VTWorker | null) {
     if (this.worker) {
       this.worker.on('READY', () => {
@@ -22,14 +24,16 @@ export default class InfluxManager {
       })
     }
   }
+
   sendStats(name: string, count: number, type: string): void {
     const writeAPI = this.client.getWriteApi(config.org, config.bucket)
       .useDefaultTags({ host: name })
     try {
       writeAPI.writePoint(new Point(type).intField("count", count))
-      writeAPI.close()
+      void writeAPI.close()
     } catch (e) { }
   }
+
   sendBaseStats(): void {
     if (!this.worker) return
     const writeAPI = this.client.getWriteApi(config.org, config.bucket)
@@ -40,9 +44,10 @@ export default class InfluxManager {
         new Point('servers').intField('count', this.worker.guilds.size),
         new Point('ping').intField('count', this.worker.shards.first()?.ping)
       ])
-      writeAPI.close()
+      void writeAPI.close()
     } catch (e) { }
   }
+
   getMemoryStats(): Point | null {
     if (!this.worker) return null
     return new Point('memory')
@@ -52,6 +57,7 @@ export default class InfluxManager {
       .intField('array-buffers', this.worker.mem.arrayBuffers)
       .intField('external', this.worker.mem.external)
   }
+
   startTimers(): void {
     setInterval(() => {
       this.eventCounter.forEach(e => {
@@ -68,23 +74,27 @@ export default class InfluxManager {
       })
     }, 5000)
   }
+
   private handleEvent(data: any): void {
     if (data.t === null) return
     const found = this.eventCounter.find(e => e.name === data.t)
     if (!found) this.eventCounter.push({ name: data.t, count: 1 })
     if (found) found.count++
   }
+
   addDBCount(name: string) {
     const found = this.dbCounter.find(e => e.name === name)
     if (!found) this.dbCounter.push({ name, count: 1 })
     if (found) found.count++
   }
+
   commandRan(name: string) {
     const found = this.commandCounter.find(e => e.name === name)
     if (!found) this.commandCounter.push({ name, count: 1 })
     if (found) found.count++
   }
 }
+
 export interface Counter {
   name: string
   count: number

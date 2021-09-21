@@ -10,7 +10,6 @@ export default <CommandOptions>{
     if (owner) await ctx.worker.db.users.setOwner(userID, false)
     if (!owner) await ctx.worker.db.users.setOwner(userID, true)
 
-    ctx.send({ content: `${owner ? `Removed users owner permissions.` : `Granted owner permissions`}`})
-
+    await ctx.send({ content: `${owner ? `Removed users owner permissions.` : `Granted owner permissions`}`})
   }
 }

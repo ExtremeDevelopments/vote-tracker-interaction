@@ -7,32 +7,36 @@ import { resolve } from "path"
 export class RESTManager {
   db = new Database('mongodb://localhost:27017/votetracker')
   timers = new Cache<string, NodeJS.Timeout>(15 * 60 * 1000)
-  notsent: Array<any> = []
+  notSent: Array<any> = []
   api: Express
+
   constructor(public readonly port: number) {
     this.api = express()
     this.api.use(express.json())
     this.api.use(express.urlencoded({ extended: true }))
-    LoadRoutes(this.api, resolve(__dirname, '../../api/routes'), this)
 
+    LoadRoutes(this.api, resolve(__dirname, '../../api/routes'), this)
   }
+
   start(): void {
     this.api.listen(this.port)
   }
+
   async send(route: string, data: any) {
     const fetched = await fetch(`http://localhost:2013${route}`, {
       method: 'POST',
       body: JSON.stringify(data),
       headers: { 'Content-Type': 'application/json' }
     })
+
     if (!fetched.ok) {
       console.log(`API | Did not receive response from worker internal API.`)
-      this.notsent.push({ route, data })
+      this.notSent.push({ route, data })
       setTimeout(() => { this.send(route, data) }, 1.8e5)
     }
-    if (fetched.ok && this.notsent.length !== 0) {
-      let i = 0;
-      for (const data of this.notsent) {
+
+    if (fetched.ok && this.notSent.length !== 0) {
+      for (const data of this.notSent) {
         setTimeout(() => {
           fetch(`http://localhost:2013`, {
             method: 'POST',
@@ -41,7 +45,7 @@ export class RESTManager {
           })
         }, 5000)
       }
-      this.notsent = []
+      this.notSent = []
     }
   }
 }

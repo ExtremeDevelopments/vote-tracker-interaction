@@ -1,7 +1,7 @@
 import { Schema, model } from "mongoose";
 import { Snowflake } from "discord-api-types";
 import { Cache } from '@jpbberry/cache'
-import { VTWorker } from "../../client/VTWorker";
+
 export interface UserDoc {
   id: Snowflake
   blacklisted: boolean
@@ -9,6 +9,7 @@ export interface UserDoc {
   reminders: boolean
   total_votes: number
 }
+
 export interface UserVoteDoc {
   id: Snowflake
   guild_id: Snowflake
@@ -17,6 +18,7 @@ export interface UserVoteDoc {
   streak: number
   highest_streak: number
 }
+
 const userSchema = new Schema({
   id: { type: String, required: true, unique: true },
   blacklisted: { type: Boolean, default: false },
@@ -24,6 +26,7 @@ const userSchema = new Schema({
   reminders: { type: Boolean, default: false },
   total_votes: { type: Number, default: 0 },
 })
+
 const userVoteSchema = new Schema({
   id: { type: String, required: true },
   guild_id: { type: String, required: true },

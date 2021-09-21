@@ -22,16 +22,20 @@ export default <CommandOptions> {
   exec: async (ctx) => {
     if (!ctx.guild) return
     if (ctx.isInteraction) ctx.args = [ctx.options]
+
     const user = await ctx.worker.db.users.getUser(ctx.author.id)
+
     if(ctx.options.enable) {
       user.reminders = true
       await ctx.worker.db.users.updateUser(user)
-      ctx.reply({ embeds: [{ description: 'Reminder option enabled!'}]})
+      await ctx.reply({ embeds: [{ description: 'Reminder option enabled!'}]})
+      return
     }
+
     if(ctx.options.disable) {
       user.reminders = false
       await ctx.worker.db.users.updateUser(user)
-      ctx.reply({ embeds: [{ description: 'Reminder option disabled!'}]})
+      await ctx.reply({ embeds: [{ description: 'Reminder option disabled!'}]})
     }
   }
 }

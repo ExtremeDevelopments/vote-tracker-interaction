@@ -1,7 +1,7 @@
 import { Cache } from '@jpbberry/cache'
 import { Schema, model } from 'mongoose'
 import { Snowflake } from 'discord-api-types'
-import { VTWorker } from '../../client/VTWorker'
+
 export interface GuildDoc {
   id: Snowflake
   prefix: string
@@ -63,6 +63,7 @@ export class GuildDB {
     guildData.prefix = prefix
     await this.updateGuild(guildData)
   }
+
   public async getAllCodes(): Promise<(string | null)[]> {
     const tickets = await guildModel.find({})
     return tickets.filter(x => x.auth_code !== null)

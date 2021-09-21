@@ -7,11 +7,13 @@ export class SlashCommandContext extends SlashContext {
   get db() {
     return this.worker.db
   }
-  async send(data: MessageTypes, ephermal: boolean = false): Promise<null> {
-    return await super.send(data, ephermal)
+
+  async send(data: MessageTypes, ephemeral: boolean = false): Promise<null> {
+    return await super.send(data, ephemeral)
   }
-  async reply(data: MessageTypes, mention?: boolean | undefined, ephermal?: boolean | undefined): Promise<null> {
-    const finalID = createID(this.worker.managers.buttons.cache.map((x, e) => e), 16)
+
+  async reply(data: MessageTypes, mention?: boolean | undefined, ephemeral?: boolean | undefined): Promise<null> {
+    const finalID = createID(this.worker.managers.buttons.cache.map((_button, key) => key), 16)
     if (this.command.deletable && typeof data === 'object') {
       if (!(data instanceof Embed)) {
         data.components = data.components = [
@@ -33,18 +35,21 @@ export class SlashCommandContext extends SlashContext {
         ]
       }
     }
-    await super.send(data, ephermal)
 
-    if (!ephermal) this.worker.managers.buttons.createButton(finalID, { author_id: this.author.id })
+    await super.send(data, ephemeral)
+
+    if (!ephemeral) this.worker.managers.buttons.createButton(finalID, { author_id: this.author.id })
     return null
   }
 }
+
 export class CommandContext extends CmdContext {
   get db() {
     return this.worker.db
   }
-  async reply(data: MessageTypes, mention?: boolean | undefined, ephermal?: boolean | undefined) {
-    const finalID = createID(this.worker.managers.buttons.cache.map((x, e) => e), 16)
+
+  async reply(data: MessageTypes, mention?: boolean | undefined, ephemeral?: boolean | undefined) {
+    const finalID = createID(this.worker.managers.buttons.cache.map((_button, key) => key), 16)
     if (this.command.deletable && typeof data === 'object') {
       if (!(data instanceof Embed)) {
 
@@ -64,8 +69,7 @@ export class CommandContext extends CmdContext {
       }
     }
 
-    
     this.worker.managers.buttons.createButton(finalID, { author_id: this.author.id })
-    return await super.reply(data, mention, ephermal)
+    return await super.reply(data, mention, ephemeral)
   }
 }

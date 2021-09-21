@@ -66,6 +66,7 @@ export default <CommandOptions>{
   exec: async (ctx) => {
     ctx.args = [ctx.options]
     const guildData = await ctx.worker.db.guilds.getGuild(ctx.guild?.id as Snowflake)
+
     if (ctx.options.channel) {
       if (guildData.vote.channel_id === ctx.options.channel.channel) return ctx.reply(`This is already the set channel for vote messages to be sent to.`, false, true)
 
@@ -74,6 +75,7 @@ export default <CommandOptions>{
       await ctx.worker.db.guilds.updateGuild(guildData)
       return ctx.reply(`Updated the vote channel to <#${ctx.options.channel.channel}>!`, false, true)
     }
+
     if (ctx.options.message) {
       if (ctx.options.message.replacements) {
         const embed = ctx.embed
@@ -87,6 +89,7 @@ export default <CommandOptions>{
         `)
           .footer(`If you need further support, contact us in our support server! (/help)`)
           .color(colors.ORANGE)
+
         return ctx.reply({ embeds: [embed.render()] }, false, true)
       }
       if (ctx.options.message.set) {
@@ -98,10 +101,15 @@ export default <CommandOptions>{
         return ctx.reply(`Updated vote message!`, false, true)
       }
     }
+
     if (ctx.options.role) {
-      if (guildData.vote.role === ctx.options.role.role) return ctx.reply(`This is already the selected vote role!`, false, true)
-      guildData.vote.role === ctx.options.role.role
+      if (guildData.vote.role === ctx.options.role.role)
+        return ctx.reply(`This is already the selected vote role!`, false, true)
+
+      guildData.vote.role = ctx.options.role.role
+
       await ctx.worker.db.guilds.updateGuild(guildData)
+
       return ctx.reply(`Updated the vote role!`, false, true)
     }
   }

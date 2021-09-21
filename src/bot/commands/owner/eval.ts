@@ -1,9 +1,11 @@
 import { CommandOptions } from "discord-rose";
 import util from "util"
 import { colors } from "../../../structures/extensions/Colors";
-function clean (text: string): string {
+
+function clean (text: any): string {
   if (typeof (text) === 'string') { return text.replace(/`/g, '`' + String.fromCharCode(8203)).replace(/@/g, '@' + String.fromCharCode(8203)) } else { return text }
 }
+
 export default <CommandOptions>{
   command: 'eval',
   ownerOnly: true,
@@ -12,7 +14,7 @@ export default <CommandOptions>{
 
     try {
       const code = ctx.args.join(' ')
-      let evaled: string | string[] = eval(code)
+      let evaled = eval(code)
 
       if (evaled instanceof Promise) evaled = await evaled
 
