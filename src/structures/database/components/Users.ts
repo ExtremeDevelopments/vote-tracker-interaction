@@ -2,6 +2,7 @@ import { Schema, model } from "mongoose";
 import { Snowflake } from "discord-api-types";
 import { Cache } from '@jpbberry/cache'
 import { VTWorker } from "../../client/VTWorker";
+import InfluxManager from "../../managers/Influx";
 export interface UserDoc {
   id: Snowflake
   blacklisted: boolean
@@ -35,7 +36,7 @@ const userVoteSchema = new Schema({
 
 const userModel = model<UserDoc>('users.global', userSchema)
 const userVoteModel = model<UserVoteDoc>('users.votes', userVoteSchema)
-
+const influx = new InfluxManager(undefined)
 export class UserDB {
   cache = {
     votes: new Cache<Snowflake, UserVoteDoc>(15 * 60 * 1000),
@@ -43,6 +44,7 @@ export class UserDB {
   }
 
   async getUser(id: Snowflake): Promise<UserDoc> {
+    influx.addDBCount('users.globals')
     const fromCache = this.cache.globals.get(id)
 
     if (fromCache !== undefined) return fromCache
@@ -58,6 +60,7 @@ export class UserDB {
   }
 
   async getUserVotes(id: Snowflake, guild_id: Snowflake): Promise<UserVoteDoc> {
+    influx.addDBCount('users.votes')
     const appended = `${guild_id}-${id}`
     const fromCache = this.cache.votes.get(appended)
 
@@ -74,11 +77,13 @@ export class UserDB {
   }
 
   async updateUser(doc: UserDoc): Promise<void> {
+    influx.addDBCount('users.globals')
     this.cache.globals.set(doc.id, doc)
     await userModel.updateOne({ id: doc.id }, doc, { upsert: true })
   }
 
   async updateVoteUser(doc: UserVoteDoc): Promise<void> {
+    influx.addDBCount('users.votes')
     this.cache.votes.set(`${doc.guild_id}-${doc.id}`, doc)
     console.log(doc)
     await userVoteModel.updateOne({ id: doc.id, guild_id: doc.guild_id }, doc, { upsert: true })

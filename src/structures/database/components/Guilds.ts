@@ -2,6 +2,7 @@ import { Cache } from '@jpbberry/cache'
 import { Schema, model } from 'mongoose'
 import { Snowflake } from 'discord-api-types'
 import { VTWorker } from '../../client/VTWorker'
+import InfluxManager from '../../managers/Influx'
 export interface GuildDoc {
   id: Snowflake
   prefix: string
@@ -27,12 +28,12 @@ const guildSchema = new Schema({
 })
 
 const guildModel = model<GuildDoc>('guilds.config', guildSchema)
-
+const influx = new InfluxManager(undefined)
 export class GuildDB {
   cache: Cache<Snowflake, GuildDoc> = new Cache(15 * 60 * 1000)
 
   public async getGuild(id: Snowflake): Promise<GuildDoc> {
-
+    influx.addDBCount('guilds')
     const fromCache = this.cache.get(id)
 
     if (fromCache !== undefined) return fromCache
@@ -48,6 +49,7 @@ export class GuildDB {
   }
 
   public async updateGuild(doc: GuildDoc): Promise<void> {
+    influx.addDBCount('guilds')
     this.cache.set(doc.id, doc)
 
     await guildModel.updateOne({ id: doc.id }, doc, { upsert: true })

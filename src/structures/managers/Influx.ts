@@ -10,8 +10,8 @@ export default class InfluxManager {
   eventCounter: Array<Counter> = []
   dbCounter: Array<Counter> = []
   commandCounter: Array<Counter> = []
-  constructor(private readonly worker: VTWorker | null) {
-    if (this.worker) {
+  constructor(private readonly worker: VTWorker | undefined) {
+    if (this.worker !== undefined) {
       this.worker.on('READY', () => {
         setInterval(() => {
           this.sendBaseStats()
@@ -21,6 +21,7 @@ export default class InfluxManager {
         this.handleEvent(data)
       })
     }
+    this.startTimers()
   }
   sendStats(name: string, count: number, type: string): void {
     const writeAPI = this.client.getWriteApi(config.org, config.bucket)
@@ -38,7 +39,8 @@ export default class InfluxManager {
       writeAPI.writePoints([
         this.getMemoryStats() as Point,
         new Point('servers').intField('count', this.worker.guilds.size),
-        new Point('ping').intField('count', this.worker.shards.first()?.ping)
+        new Point('ping').intField('count', this.worker.shards.first()?.ping),
+        new Point('uptime').intField('length', Math.floor(process.uptime() / 60))
       ])
       writeAPI.close()
     } catch (e) { }
