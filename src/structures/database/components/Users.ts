@@ -6,6 +6,7 @@ export interface UserDoc {
   id: Snowflake
   blacklisted: boolean
   owner: boolean
+  reminders: boolean
   total_votes: number
 }
 export interface UserVoteDoc {
@@ -13,18 +14,23 @@ export interface UserVoteDoc {
   guild_id: Snowflake
   total_votes: number
   last_vote: number
+  streak: number
+  highest_streak: number
 }
 const userSchema = new Schema({
   id: { type: String, required: true, unique: true },
   blacklisted: { type: Boolean, default: false },
   owner: { type: Boolean, default: false },
-  total_votes: { type: Number, default: 0 }
+  reminders: { type: Boolean, default: false },
+  total_votes: { type: Number, default: 0 },
 })
 const userVoteSchema = new Schema({
   id: { type: String, required: true },
   guild_id: { type: String, required: true },
   total_votes: { type: Number, default: 0 },
-  last_vote: { type: Date, default: null }
+  last_vote: { type: Date, default: null },
+  streak: { type: Number, default: 0 },
+  highest_streak: { type: Number, default: 0 }
 })
 
 const userModel = model<UserDoc>('users.global', userSchema)

@@ -1,4 +1,4 @@
-import { RESTManager } from "../../structures/managers/api/external/REST";
+import { RESTManager } from "../../structures/managers/REST";
 import { Express } from 'express'
 export default function (this: RESTManager, app: Express): void {
   app.post('/add-timer', (req, res) => {
@@ -10,5 +10,11 @@ export default function (this: RESTManager, app: Express): void {
   })
   app.post('/vote', (req, res) => {
     this.send(`/new-vote`, req.body)
+  })
+  app.post('/reminder', (req, res) => {
+    this.timers.set(req.body.user, setTimeout(() => {
+      this.send('/reminder-send', { guild: req.body.guild, user: req.body.user })
+      this.timers.delete(req.body.user)
+    }, 3000))
   })
 }

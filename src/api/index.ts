@@ -1,4 +1,4 @@
-import { RESTManager } from "../structures/managers/api/external/REST";
+import { RESTManager } from "../structures/managers/REST";
 
 const rest = new RESTManager(2312)
 rest.start()

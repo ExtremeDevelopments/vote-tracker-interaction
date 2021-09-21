@@ -13,7 +13,7 @@ export class RESTManager {
     this.api = express()
     this.api.use(express.json())
     this.api.use(express.urlencoded({ extended: true }))
-    LoadRoutes(this.api, resolve(__dirname + '../routes'), this)
+    LoadRoutes(this.api, resolve(__dirname, '../../api/routes'), this)
 
   }
   start(): void {
