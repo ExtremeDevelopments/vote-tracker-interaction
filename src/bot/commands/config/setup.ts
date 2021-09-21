@@ -49,7 +49,7 @@ export default <CommandOptions>{
       If you have any questions or concerns, please join our [Support Server!](https://discord.gg/XdZexqk4HD)`)
         .footer(`Vote Tracker`)
         .color(colors.ORANGE)
-      ctx.reply({ embeds: [embed.render()] }, false, true)
+      return await ctx.reply({ embeds: [embed.render()] }, false, true)
     }
   }
 }

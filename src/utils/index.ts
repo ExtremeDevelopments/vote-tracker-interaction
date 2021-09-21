@@ -1,14 +1,19 @@
 import { GuildDoc } from "../structures/database/components/Guilds";
-export function createID(notAllowed: Array<string | null>, l: number): string {
+
+export function createID(notAllowed: Array<string | null>, length: number): string {
   let result = '';
 
   const characters = '0123456789ABCDEFGHIJKLMNAOPQRSTUVWXYZ'
-  for (var i = 0; i < l; i++) {
+
+  for (let i = 0; i < length; i++) {
     result += characters.charAt(Math.floor(Math.random() * characters.length))
   }
-  if (notAllowed.includes(result)) return createID(notAllowed, l)
+
+  if (notAllowed.includes(result)) return createID(notAllowed, length)
+
   return result
 }
+
 export function replace(string: string, user: string, data: GuildDoc) {
   return string
   .replace('{page}', `https://top.gg/servers/${data.id}`)

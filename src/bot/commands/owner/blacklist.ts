@@ -1,4 +1,5 @@
 import { CommandOptions, Snowflake } from "discord-rose";
+
 export default <CommandOptions>{
   command: 'owner',
   ownerOnly: true,
