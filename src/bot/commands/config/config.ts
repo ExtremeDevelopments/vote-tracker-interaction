@@ -100,7 +100,7 @@ export default <CommandOptions>{
     }
     if (ctx.options.role) {
       if (guildData.vote.role === ctx.options.role.role) return ctx.reply(`This is already the selected vote role!`, false, true)
-      guildData.vote.role === ctx.options.role.role
+      guildData.vote.role = ctx.options.role.role
       await ctx.worker.db.guilds.updateGuild(guildData)
       return ctx.reply(`Updated the vote role!`, false, true)
     }
