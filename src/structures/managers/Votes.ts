@@ -26,7 +26,7 @@ export default class VoteManager {
     user.last_vote = Date.now()
     user.total_votes++
     await this.db.users.updateVoteUser(user)
-
+    this.worker.rest.timeManager.send('/reminder', { guild: guild.id, user: user.id })
     if (guild.vote.channel_id === null) return
 
     const channel = this.worker.channels.get(guild.vote.channel_id) ??
@@ -40,18 +40,10 @@ export default class VoteManager {
       .color(colors.ORANGE)
 
     this.worker.api.messages.send(channel.id, { embeds: [voteEmbed.render()], content: `<@${data.user}>,` })
-
+    console.log(guild.vote)
     if (!guild.vote.role) return
 
-    const foundGuild = this.worker.guilds.get(guild.id) ??
-      await this.worker.api.guilds.get(guild.id).catch(e => null)
-    if (!foundGuild) return
-
-    const role = this.worker.guildRoles.get(guild.id)?.filter(r => r.id === guild.vote.role).first()
-
-    if (!role) return
-
-    this.worker.api.members.addRole(guild.id, user.id, role.id).catch(e => null)
+    this.worker.api.members.addRole(guild.id, user.id, guild.vote.role).catch(console.log)
     this.worker.rest.timeManager.send('/add-timer', {
       guild: guild.id,
       user: user.id
