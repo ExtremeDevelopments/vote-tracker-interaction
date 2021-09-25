@@ -4,6 +4,7 @@
   "description": "",
   "main": "./dist/index",
   "dependencies": {
+    "@discord-rose/permissions-middleware": "^1.2.0",
     "@influxdata/influxdb-client": "^1.17.0",
     "@jpbberry/cache": "^1.0.4",
     "@jpbberry/load-routes": "^1.0.3",

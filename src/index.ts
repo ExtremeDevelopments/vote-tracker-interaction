@@ -1,6 +1,7 @@
 import { VTWorker } from "./structures/client/VTWorker";
 import { CommandContext, SlashCommandContext } from "./structures/extensions/CommandContext";
 import { bot as config } from './config.json'
+import permissionsMiddleware from '@discord-rose/permissions-middleware'
 const worker = new VTWorker({
   token: config.token,
   cache: {
@@ -8,6 +9,7 @@ const worker = new VTWorker({
   }
 })
 worker.loadMiddlewares(__dirname + '/bot/middlewares')
+worker.commands.middleware(permissionsMiddleware())
 worker.commands.options({
   bots: false,
   interactionGuild: '738604310060990555'

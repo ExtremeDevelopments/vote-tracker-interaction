@@ -7,6 +7,7 @@ export default <CommandOptions>{
   command: 'setup',
   interactionOnly: true,
   guildOnly: true,
+  userPerms: ['manageGuild'],
   interaction: {
     name: 'setup',
     description: 'setup your server!',
