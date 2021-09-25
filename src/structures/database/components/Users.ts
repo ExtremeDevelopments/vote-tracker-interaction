@@ -66,7 +66,7 @@ export class UserDB {
 
     if (fromCache !== undefined) return fromCache
 
-    const fromDB: UserVoteDoc = await userVoteModel.findOne({ id }).lean()
+    const fromDB: UserVoteDoc = await userVoteModel.findOne({ id, guild_id }).lean()
 
     if (fromDB) {
       this.cache.votes.set(id, fromDB)
