@@ -14,11 +14,6 @@ export default <CommandOptions>{
         description: 'User to check for.',
         type: ApplicationCommandOptionType.User,
         required: true
-      },
-      {
-        name: 'ephermal',
-        description: 'Whether or not to make the message ephermal.',
-        type: ApplicationCommandOptionType.Boolean
       }
     ]
   },
@@ -35,6 +30,6 @@ export default <CommandOptions>{
       **Last vote:** ${userData.last_vote === null ? `Never` : `<t:${Math.floor(userData.last_vote / 1000)}:R>`}
       `)
       .color(colors.ORANGE)
-    ctx.reply({ embeds: [embed.render()] }, false, ctx.options.ephermal || false)
+    ctx.reply({ embeds: [embed.render()] }, false, false)
   }
 }
