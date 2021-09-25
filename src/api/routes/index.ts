@@ -8,7 +8,7 @@ export default function (this: RESTManager, app: Express): void {
       this.timers.delete(`${req.body.guild}-${req.body.user}`)
     }, 4.32e+7))
   })
-  app.post('/vote', (req, res) => {
+  app.post('/send/server', (req, res) => {
     this.send(`/new-vote`, req.body)
   })
   app.post('/reminder', (req, res) => {
