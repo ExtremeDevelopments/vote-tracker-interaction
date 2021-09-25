@@ -10,7 +10,7 @@ const worker = new VTWorker({
 worker.loadMiddlewares(__dirname + '/bot/middlewares')
 worker.commands.options({
   bots: false,
-  interactionGuild: '707479016696971275'
+  interactionGuild: '738604310060990555'
 })
 worker.commands.prefix((message) => {
   if(!message.guild_id) return 'v!'
@@ -19,3 +19,4 @@ worker.commands.prefix((message) => {
 worker.commands.load(__dirname + '/bot/commands')
 worker.commands.CommandContext = CommandContext
 worker.commands.SlashCommandContext = SlashCommandContext
+worker.setStatus("watching", "votes fly by!")

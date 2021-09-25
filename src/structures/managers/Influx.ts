@@ -68,7 +68,7 @@ export default class InfluxManager {
         this.sendStats(e.name, e.count, 'commands')
         e.count = 0
       })
-    }, 5000)
+    }, 10000)
   }
   private handleEvent(data: any): void {
     if (data.t === null) return
