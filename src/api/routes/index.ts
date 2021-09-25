@@ -9,6 +9,7 @@ export default function (this: RESTManager, app: Express): void {
     }, 4.32e+7))
   })
   app.post('/send/server', (req, res) => {
+    res.sendStatus(200)
     this.send(`/new-vote`, req.body)
   })
   app.post('/reminder', (req, res) => {

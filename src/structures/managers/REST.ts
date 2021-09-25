@@ -25,12 +25,12 @@ export class RESTManager {
       body: JSON.stringify(data),
       headers: { 'Content-Type': 'application/json' }
     })
-    if (!fetched.ok) {
+    if (fetched.status !== 200) {
       console.log(`API | Did not receive response from worker internal API.`)
       this.notsent.push({ route, data })
       setTimeout(() => { this.send(route, data) }, 1.8e5)
     }
-    if (fetched.ok && this.notsent.length !== 0) {
+    if (fetched.status === 200 && this.notsent.length !== 0) {
       let i = 0;
       for (const data of this.notsent) {
         setTimeout(() => {

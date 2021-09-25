@@ -15,8 +15,8 @@ export default class VoteManager {
     this.db = rest.db
     this.worker = rest.worker
     this.app.post('/new-vote', (req, res) => {
-      this.handleVote(req.body as APIResponse)
       res.sendStatus(200)
+      this.handleVote(req.body as APIResponse)
     })
   }
   async handleVote(data: APIResponse): Promise<void> {
