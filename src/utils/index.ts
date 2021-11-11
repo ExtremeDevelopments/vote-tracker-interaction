@@ -10,13 +10,40 @@ export function createID(notAllowed: Array<string | null>, l: number): string {
   return result
 }
 export function replace(string: string, user: string, data: GuildDoc) {
+  const replacements: Array<{ searchValue: string, replaceValue: string }> = [{
+    searchValue: '{page}',
+    replaceValue: `https://top.gg/servers/${data.id}`,
+  },
+  {
+    searchValue: '{member}',
+    replaceValue: `<@${user}>`
+  },
+  {
+    searchValue: '{user}',
+    replaceValue: `<@!${user}>`
+  },
+  {
+    searchValue: '{vote}',
+    replaceValue: `https://top.gg/servers/${data.id}/vote`
+  },
+  {
+    searchValue: '{invite}',
+    replaceValue: `https://top.gg/servers/${data.id}/join`
+  },
+  {
+    searchValue: '{serverID}',
+    replaceValue: data.id
+  },
+  {
+    searchValue: '{guildID}',
+    replaceValue: data.id
+  },
+  {
+    searchValue: '{link}',
+    replaceValue: `https://top.gg/servers/${data.id}`
+  }]
+  for (const item of replacements) {
+    string.replace(item.searchValue, item.replaceValue)
+  }
   return string
-  .replace('{page}', `https://top.gg/servers/${data.id}`)
-  .replace('{member}', `<@${user}>`)
-  .replace('{user}', `<@${user}>`)
-  .replace('{vote}', `https://top.gg/servers/${data.id}/vote`)
-  .replace('{invite}', `https://top.gg/servers/${data.id}/join`)
-  .replace('{serverID}', `${data.id}`)
-  .replace(`{guildID}`, `${data.id}`)
-  .replace('{link}', `https://top.gg/servers/${data.id}`)
 }
